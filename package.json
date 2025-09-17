@@ -1,0 +1,32 @@
+{
+  "name": "spotilyze",
+  "version": "0.1.0",
+  "description": "A web app that lets users upload their streaming history to instantly view simple insights",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm --filter api build && pnpm --filter web build",
+    "build:web": "pnpm --filter web build",
+    "build:api": "pnpm --filter api build",
+    "type-check": "pnpm --recursive type-check",
+    "lint": "biome check . && eslint .",
+    "lint:fix": "biome check --apply . && eslint . --fix",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@eslint/js": "^9.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.9.0",
+    "typescript": "^5.5.4"
+  },
+  "keywords": ["spotify", "music", "analytics", "streaming"],
+  "author": "kevgetz",
+  "license": "MIT",
+  "packageManager": "pnpm@10.15.1"
+}

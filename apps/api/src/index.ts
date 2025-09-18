@@ -1,9 +1,8 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
-import { success } from 'zod';
 import JSZip from 'jszip';
-import { validateSpotifyDataArray } from 'shared';
+import { SpotifyDataArraySchema } from 'shared';
 
 const app = new Hono();
 
@@ -56,7 +55,6 @@ app.post('/upload', async (c) => {
 
     // Iterate through all files in the ZIP
     loadedZipFile.forEach((relativePath, zipEntry) => {
-      console.log(relativePath);
       // Only process JSON files, ignore PDFs and other files
       if (relativePath.toLowerCase().endsWith('.json') && 
           !zipEntry.dir && 
@@ -93,10 +91,11 @@ app.post('/upload', async (c) => {
       }
 
       // Validate JSON Content
-      if (!validateSpotifyDataArray(jsonData)) {
+      const validationResult = SpotifyDataArraySchema.safeParse(jsonData);
+      if (!validationResult.success) {
         return c.json({
           success: false,
-          message: `Invalid Spotify streaming history format in file: ${jsonFileName}`
+          message: `Invalid Spotify streaming history format in file: ${jsonFileName}. ${validationResult.error.message}`
         }, 400);
       }
 

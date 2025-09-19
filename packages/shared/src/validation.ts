@@ -5,7 +5,7 @@ export const SpotifyStreamingRecordSchema = z.object({
   ts: z.string(),
   ms_played: z.number(),
   
-  // Optional fields that can be null
+  // Optional fields
   platform: z.string().nullable(),
   conn_country: z.string().nullable(),
   ip_addr: z.string().nullable(),

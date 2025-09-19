@@ -3,12 +3,60 @@ import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import JSZip from 'jszip';
 import { SpotifyDataArraySchema } from 'shared';
+import { MongoClient, Db } from 'mongodb';
+
+// MongoDB connection
+let db: Db;
+const client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017/spotilyze');
+
+async function connectToDatabase() {
+  try {
+    await client.connect();
+    db = client.db('spotilyze');
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    process.exit(1);
+  }
+}
+
+// Connect to database on startup
+connectToDatabase();
+
+// Collection interfaces
+interface User {
+  _id?: string;
+  username: string;
+  passwordHash: string;
+  createdAt: Date;
+}
+
+interface StreamingUpload {
+  _id?: string;
+  userId: string;
+  filename: string;
+  uploadedAt: Date;
+  recordCount: number;
+  fileSize: number;
+}
+
+interface StreamingRecord {
+  _id?: string;
+  userId: string;
+  uploadId: string;
+  ts: string;
+  ms_played: number;
+  master_metadata_track_name: string;
+  master_metadata_album_artist_name: string;
+  master_metadata_album_album_name?: string;
+  spotify_track_uri?: string;
+}
 
 const app = new Hono();
 
 // Enable CORS for frontend
 app.use('/*', cors({
-  origin: 'http://localhost:5173', // Vite default port
+  origin: 'http://localhost:5173',
   allowHeaders: ['Content-Type'],
   allowMethods: ['POST', 'GET', 'OPTIONS'],
 }));
@@ -21,8 +69,6 @@ app.get('/health', (c) => {
 // Upload endpoint (Feature 1)
 app.post('/upload', async (c) => {
   try {
-    // For now, just return a success message
-    // We'll implement file handling in the next step
     const body = await c.req.parseBody();
     const zippedFile = body['file'] as File;
 
@@ -113,27 +159,48 @@ app.post('/upload', async (c) => {
         return true;
       });
 
-      // Add this data to our streaming records
+      // Add this data to streaming records
       if (Array.isArray(filteredData)) {
         streamingRecords.push(...filteredData);
       }
     }
 
-    // At the end of the upload endpoint, update the success response:
-    return c.json({ 
-      success: true, 
-      message: `Successfully processed ${jsonFiles.length} JSON files with ${streamingRecords.length} quality music streams`,
-      totalFiles: jsonFiles.length,
-      qualityStreams: streamingRecords.length
-    });
-  }
-  catch (error) {
-    return c.json({ 
-      success: false, 
-      message: 'Upload failed',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, 500);
-  }
+    // Store in database
+    const uploadRecord = {
+      userId: 'temp-user',
+      filename: zippedFile.name,
+      uploadedAt: new Date(),
+      recordCount: streamingRecords.length,
+      fileSize: zippedFile.size
+    };
+
+    const uploadResult = await db.collection('uploads').insertOne(uploadRecord);
+    const uploadId = uploadResult.insertedId.toString();
+
+    // Store streaming records with reference to upload
+    const recordsToInsert = streamingRecords.map(record => ({
+      ...record,
+      userId: 'temp-user',
+      uploadId: uploadId
+    }));
+
+    await db.collection('streaming_records').insertMany(recordsToInsert);
+
+  return c.json({ 
+    success: true, 
+    message: `Successfully stored ${streamingRecords.length} quality music streams in database`,
+    totalFiles: jsonFiles.length,
+    qualityStreams: streamingRecords.length,
+    uploadId: uploadId
+  });
+    }
+    catch (error) {
+      return c.json({ 
+        success: false, 
+        message: 'Upload failed',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      }, 500);
+    }
 });
 
 const port = 3000;

@@ -5,7 +5,6 @@ export const Route = createFileRoute('/upload')({
   component: UploadComponent,
 })
 
-// Styles object - clean separation from JSX
 const styles = {
   container: {
     maxWidth: '600px',
@@ -143,7 +142,6 @@ function UploadComponent() {
           Select your Spotify streaming history
         </h2>
         
-        {/* Hidden file input */}
         <input
           type="file"
           accept=".zip"
@@ -152,7 +150,6 @@ function UploadComponent() {
           id="file-input"
         />
         
-        {/* Drop zone - now clickable and with drag events */}
         <div 
           style={styles.dropZone}
           onClick={() => document.getElementById('file-input')?.click()}
@@ -181,7 +178,6 @@ function UploadComponent() {
           )}
         </div>
         
-        {/* Upload button - show only when file is selected */}
         {selectedFile && (
           <button 
             className="btn btn-primary" 

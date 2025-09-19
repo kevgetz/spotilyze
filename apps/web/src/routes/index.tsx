@@ -9,7 +9,6 @@ function IndexComponent() {
     <div>
       <h2>Welcome to Spotilyze</h2>
       <p>Analyze your Spotify listening history!</p>
-      {/* Später: Navigation zu Upload oder Login */}
     </div>
   )
 }

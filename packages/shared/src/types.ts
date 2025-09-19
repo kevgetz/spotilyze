@@ -20,6 +20,6 @@ export interface SpotifyStreamingRecord {
   shuffle: boolean;                             // Shuffle mode
   skipped: boolean;                             // Was skipped
   offline: boolean;                             // Offline playback
-  offline_timestamp: number;                    // Offline timestamp
+  ooffline_timestamp: number | null;            // Offline timestamp
   incognito_mode: boolean;                      // Incognito mode
 }

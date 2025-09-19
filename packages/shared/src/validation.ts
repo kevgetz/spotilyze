@@ -1,11 +1,14 @@
 import { z } from 'zod';
 
 export const SpotifyStreamingRecordSchema = z.object({
+  // Required core fields
   ts: z.string(),
-  platform: z.string(),
   ms_played: z.number(),
-  conn_country: z.string(),
-  ip_addr: z.string(),
+  
+  // Optional fields that can be null
+  platform: z.string().nullable(),
+  conn_country: z.string().nullable(),
+  ip_addr: z.string().nullable(),
   master_metadata_track_name: z.string().nullable(),
   master_metadata_album_artist_name: z.string().nullable(),
   master_metadata_album_album_name: z.string().nullable(),
@@ -17,13 +20,13 @@ export const SpotifyStreamingRecordSchema = z.object({
   audiobook_uri: z.string().nullable(),
   audiobook_chapter_uri: z.string().nullable(),
   audiobook_chapter_title: z.string().nullable(),
-  reason_start: z.string(),
-  reason_end: z.string(),
-  shuffle: z.boolean(),
-  skipped: z.boolean(),
-  offline: z.boolean(),
-  offline_timestamp: z.number(),
-  incognito_mode: z.boolean(),
+  reason_start: z.string().nullable(),
+  reason_end: z.string().nullable(),
+  shuffle: z.boolean().nullable(),
+  skipped: z.boolean().nullable(),
+  offline: z.boolean().nullable(),
+  offline_timestamp: z.number().nullable(),
+  incognito_mode: z.boolean().nullable(),
 });
 
 export const SpotifyDataArraySchema = z.array(SpotifyStreamingRecordSchema);

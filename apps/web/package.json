@@ -10,11 +10,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.58.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@tanstack/react-router": "^1.58.3"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@tanstack/router-cli": "^1.131.48",
+    "@tanstack/router-plugin": "^1.131.48",
     "@types/react": "^18.3.9",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.2",

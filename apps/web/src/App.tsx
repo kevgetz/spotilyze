@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 function App() {
   const [status, setStatus] = useState<string>('');
+  const [uploadState, setUploadState] = useState()
 
   const testConnection = async () => {
     try {

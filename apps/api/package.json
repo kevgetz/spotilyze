@@ -10,14 +10,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "hono": "^4.6.3",
     "@hono/node-server": "^1.12.2",
+    "@types/mongodb": "^4.0.7",
+    "hono": "^4.6.3",
     "jszip": "^3.10.1",
+    "mongodb": "^6.20.0",
     "shared": "workspace:*"
   },
   "devDependencies": {
-    "tsx": "^4.19.1",
+    "@types/jszip": "^3.4.1",
     "@types/node": "^22.7.4",
-    "@types/jszip": "^3.4.1"
+    "tsx": "^4.19.1"
   }
 }

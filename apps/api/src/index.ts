@@ -99,17 +99,35 @@ app.post('/upload', async (c) => {
         }, 400);
       }
 
+      const filteredData = jsonData.filter((record: any) => {
+        // Must be music (not podcast/audiobook)
+        if (!record.master_metadata_track_name || !record.master_metadata_album_artist_name) {
+          return false;
+        }
+        
+        // Must meet minimum stream duration (28 seconds = 28,000 ms)
+        if (!record.ms_played || record.ms_played < 28000) {
+          return false;
+        }
+        
+        return true;
+      });
+
       // Add this data to our streaming records
-      if (Array.isArray(jsonData)) {
-        streamingRecords.push(...jsonData);
+      if (Array.isArray(filteredData)) {
+        streamingRecords.push(...filteredData);
       }
     }
 
+    // At the end of the upload endpoint, update the success response:
     return c.json({ 
       success: true, 
-      message: `Successfully processed ${jsonFiles.length} JSON files with ${streamingRecords.length} total records`
+      message: `Successfully processed ${jsonFiles.length} JSON files with ${streamingRecords.length} quality music streams`,
+      totalFiles: jsonFiles.length,
+      qualityStreams: streamingRecords.length
     });
-  } catch (error) {
+  }
+  catch (error) {
     return c.json({ 
       success: false, 
       message: 'Upload failed',

@@ -5,7 +5,7 @@ export const SpotifyStreamingRecordSchema = z.object({
   ts: z.string(),
   ms_played: z.number(),
   
-  // Optional fields
+  // Optional fields that can be null
   platform: z.string().nullable(),
   conn_country: z.string().nullable(),
   ip_addr: z.string().nullable(),
@@ -31,5 +31,5 @@ export const SpotifyStreamingRecordSchema = z.object({
 
 export const SpotifyDataArraySchema = z.array(SpotifyStreamingRecordSchema);
 
-// Export inferred types
+// Export inferred type (this replaces your manual interface)
 export type SpotifyStreamingRecord = z.infer<typeof SpotifyStreamingRecordSchema>;

@@ -1,60 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useAuth } from '@/contexts/AuthContext'
 
 export const Route = createFileRoute('/upload')({
   component: UploadComponent,
 })
 
-const styles = {
-  container: {
-    maxWidth: '600px',
-    margin: '0 auto',
-    padding: '0 var(--spacing-md)'
-  },
-  title: {
-    color: 'var(--color-primary)',
-    marginBottom: 'var(--spacing-xl)',
-    fontSize: 'var(--font-size-3xl)',
-    fontWeight: 600
-  },
-  subtitle: {
-    marginBottom: 'var(--spacing-lg)',
-    fontSize: 'var(--font-size-xl)'
-  },
-  uploadCard: {
-    background: 'var(--color-surface-elevated)',
-    borderRadius: 'var(--radius-lg)',
-    boxShadow: 'var(--shadow-md)',
-    border: '1px solid var(--color-border)',
-    padding: 'var(--spacing-xl)'
-  },
-  dropZone: {
-    border: '2px dashed var(--color-border)',
-    borderRadius: 'var(--radius-lg)',
-    padding: 'var(--spacing-xxl)',
-    textAlign: 'center' as const,
-    backgroundColor: 'var(--color-surface)',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease'
-  },
-  dropZoneHover: {
-    borderColor: 'var(--color-primary)',
-    backgroundColor: 'var(--color-surface-elevated)'
-  },
-  statusMessage: {
-    marginTop: 'var(--spacing-lg)',
-    padding: 'var(--spacing-md)',
-    borderRadius: 'var(--radius-md)',
-    textAlign: 'center' as const
-  }
-}
-
 function UploadComponent() {
+  const { token } = useAuth()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
   const [uploadResult, setUploadResult] = useState<string>('')
 
-  // File handling functions
   const handleFileSelect = (file: File) => {
     if (!file.name.toLowerCase().endsWith('.zip')) {
       setUploadStatus('error')
@@ -62,7 +20,7 @@ function UploadComponent() {
       return
     }
     
-    if (file.size > 250 * 1024 * 1024) { // 250MB limit
+    if (file.size > 250 * 1024 * 1024) {
       setUploadStatus('error')
       setUploadResult('File size exceeds 250MB limit.')
       return
@@ -73,15 +31,12 @@ function UploadComponent() {
     setUploadResult('')
   }
 
-  // Drag & Drop handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
-    // Add hover styling here later
   }
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
-    // Remove hover styling here later  
   }
 
   const handleDrop = (e: React.DragEvent) => {
@@ -92,7 +47,6 @@ function UploadComponent() {
     }
   }
 
-  // File input handler
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files && files.length > 0) {
@@ -100,8 +54,7 @@ function UploadComponent() {
     }
   }
 
-  // Upload function
-  const handleUpload = async () => {
+  const handleUpload = async (file: File) => {
     if (!selectedFile) return
     
     setUploadStatus('uploading')
@@ -113,92 +66,97 @@ function UploadComponent() {
       
       const response = await fetch('/api/upload', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
       })
       
       const result = await response.json()
       
       if (result.success) {
         setUploadStatus('success')
-        setUploadResult(`🎉 Success! ${result.message}`)
+        setUploadResult(`Success! ${result.message}`)
       } else {
         setUploadStatus('error')
-        setUploadResult(`❌ Error: ${result.message}`)
+        setUploadResult(`Error: ${result.message}`)
       }
     } catch (error) {
       setUploadStatus('error')
-      setUploadResult('❌ Network error. Please try again.')
+      setUploadResult('Network error. Please try again.')
     }
   }
-
+  
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>
+    <div className="container mx-auto max-w-2xl py-12">
+      <h1 className="text-4xl font-bold text-center mb-12 text-primary">
         Upload Your Spotify Data
       </h1>
       
-      <div style={styles.uploadCard}>
-        <h2 style={styles.subtitle}>
-          Select your Spotify streaming history
-        </h2>
-        
-        <input
-          type="file"
-          accept=".zip"
-          onChange={handleFileInputChange}
-          style={{ display: 'none' }}
-          id="file-input"
-        />
-        
-        <div 
-          style={styles.dropZone}
-          onClick={() => document.getElementById('file-input')?.click()}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          {selectedFile ? (
-            <div>
-              <p style={{ color: 'var(--color-success)', marginBottom: 'var(--spacing-sm)' }}>
-                ✅ {selectedFile.name}
-              </p>
-              <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                {(selectedFile.size / 1024 / 1024).toFixed(1)} MB
-              </p>
-            </div>
-          ) : (
-            <div>
-              <p className="text-muted">
-                📁 Drag & drop your Spotify data ZIP file here
-              </p>
-              <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginTop: 'var(--spacing-sm)' }}>
-                or click to browse files
-              </p>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Select your streaming history</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <input
+            type="file"
+            accept=".zip"
+            onChange={handleFileInputChange}
+            className="hidden"
+            id="file-input"
+          />
+          
+          <div 
+            className="border-2 border-dashed border-border rounded-lg p-16 text-center cursor-pointer transition-all duration-200 hover:border-primary hover:bg-muted/30"
+            onClick={() => document.getElementById('file-input')?.click()}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            {selectedFile ? (
+              <div className="space-y-3">
+                <div className="text-primary font-medium text-lg">
+                  {selectedFile.name}
+                </div>
+                <div className="text-muted-foreground">
+                  {(selectedFile.size / 1024 / 1024).toFixed(1)} MB
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="text-muted-foreground text-lg">
+                  Drop your Spotify data ZIP file here
+                </div>
+                <div className="text-muted-foreground/70 text-sm">
+                  or click to browse files
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {selectedFile && (
+            <button 
+              className="btn btn-primary w-full py-3 text-base font-medium"
+              disabled={uploadStatus === 'uploading'}
+              onClick={handleUpload}
+            >
+              {uploadStatus === 'uploading' ? 'Uploading...' : 'Upload & Analyze'}
+            </button>
+          )}
+          
+          {uploadStatus !== 'idle' && (
+            <div className={`text-center p-4 rounded-lg border ${
+              uploadStatus === 'success' 
+                ? 'text-primary border-primary/20 bg-primary/5' 
+                : uploadStatus === 'error' 
+                ? 'text-destructive border-destructive/20 bg-destructive/5'
+                : 'text-muted-foreground border-border'
+            }`}>
+              {uploadResult}
             </div>
           )}
-        </div>
-        
-        {selectedFile && (
-          <button 
-            className="btn btn-primary" 
-            style={{ marginTop: 'var(--spacing-lg)', width: '100%' }}
-            disabled={uploadStatus === 'uploading'}
-            onClick={handleUpload}
-          >
-            {uploadStatus === 'uploading' ? '⏳ Uploading...' : '🚀 Upload & Analyze'}
-          </button>
-        )}
-        
-        {uploadStatus !== 'idle' && (
-          <div style={{
-            ...styles.statusMessage,
-            color: uploadStatus === 'success' ? 'var(--color-success)' : 
-                    uploadStatus === 'error' ? 'var(--color-error)' : 'var(--color-text)'
-          }}>
-            {uploadResult}
-          </div>
-        )}
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

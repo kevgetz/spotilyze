@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import type { ChartConfig } from "@/components/ui/chart"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import type { ChartConfig } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface DailyData {
   dayOfWeek: number;
@@ -20,7 +20,7 @@ const chartConfig = {
     label: "Streams",
     color: "hsl(var(--primary))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function DailyPatternsChart({ data, loading }: DailyPatternsChartProps) {
   if (loading) {
@@ -35,20 +35,20 @@ export function DailyPatternsChart({ data, loading }: DailyPatternsChartProps) {
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dayData = Array.from({ length: 7 }, (_, i) => {
     const dayStreams = data
-      .filter(item => item.dayOfWeek === (i + 1))
-      .reduce((sum, item) => sum + item.streamCount, 0)
-    
+      .filter((item) => item.dayOfWeek === i + 1)
+      .reduce((sum, item) => sum + item.streamCount, 0);
+
     return {
       day: dayNames[i],
-      streams: dayStreams
-    }
-  })
+      streams: dayStreams,
+    };
+  });
 
   return (
     <Card>
@@ -62,14 +62,10 @@ export function DailyPatternsChart({ data, loading }: DailyPatternsChartProps) {
             <XAxis dataKey="day" />
             <YAxis />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar 
-              dataKey="streams" 
-              fill="var(--color-streams)"
-              radius={[4, 4, 0, 0]}
-            />
+            <Bar dataKey="streams" fill="var(--color-streams)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

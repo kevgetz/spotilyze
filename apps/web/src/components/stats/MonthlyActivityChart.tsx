@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import type { ChartConfig } from "@/components/ui/chart"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import type { ChartConfig } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface MonthlyData {
   date: string;
@@ -19,7 +19,7 @@ const chartConfig = {
     label: "Streams",
     color: "hsl(var(--primary))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function MonthlyActivityChart({ data, loading }: MonthlyActivityChartProps) {
   if (loading) {
@@ -34,14 +34,14 @@ export function MonthlyActivityChart({ data, loading }: MonthlyActivityChartProp
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
-  const chartData = data.map(item => ({
-    month: new Date(item.date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
+  const chartData = data.map((item) => ({
+    month: new Date(item.date).toLocaleDateString("en-US", { month: "short", year: "2-digit" }),
     streams: item.streamCount,
-    hours: item.totalHours
-  }))
+    hours: item.totalHours,
+  }));
 
   return (
     <Card className="col-span-full">
@@ -55,15 +55,10 @@ export function MonthlyActivityChart({ data, loading }: MonthlyActivityChartProp
             <XAxis dataKey="month" />
             <YAxis />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Line 
-              type="monotone" 
-              dataKey="streams" 
-              stroke="var(--color-streams)"
-              strokeWidth={2}
-            />
+            <Line type="monotone" dataKey="streams" stroke="var(--color-streams)" strokeWidth={2} />
           </LineChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

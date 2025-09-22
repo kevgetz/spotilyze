@@ -1,10 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const SpotifyStreamingRecordSchema = z.object({
   // Required core fields
   ts: z.string(),
   ms_played: z.number(),
-  
+
   // Optional fields that can be null
   platform: z.string().nullable(),
   conn_country: z.string().nullable(),

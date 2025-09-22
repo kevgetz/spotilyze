@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Song {
   track: string;
@@ -23,7 +23,7 @@ export function TopSongsList({ songs, loading }: TopSongsListProps) {
           <div className="text-center text-muted-foreground">Loading...</div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -40,21 +40,15 @@ export function TopSongsList({ songs, loading }: TopSongsListProps) {
                   {index + 1}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="font-medium truncate">
-                    {song.track}
-                  </div>
-                  <div className="text-muted-foreground text-xs truncate">
-                    {song.artist}
-                  </div>
+                  <div className="font-medium truncate">{song.track}</div>
+                  <div className="text-muted-foreground text-xs truncate">{song.artist}</div>
                 </div>
               </div>
-              <span className="text-primary text-sm font-medium">
-                {song.totalHours}h
-              </span>
+              <span className="text-primary text-sm font-medium">{song.totalHours}h</span>
             </div>
           ))}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

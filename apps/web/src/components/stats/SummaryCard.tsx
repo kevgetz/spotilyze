@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface SummaryStats {
   totalTracks: number;
@@ -8,7 +8,6 @@ interface SummaryStats {
   uniqueAlbums: number;
   timeSpanYears: number;
 }
-
 
 interface SummaryCardProps {
   summary: SummaryStats | null;
@@ -26,7 +25,7 @@ export function SummaryCard({ summary, loading }: SummaryCardProps) {
           <div className="text-center text-muted-foreground">Loading...</div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (!summary) {
@@ -41,11 +40,15 @@ export function SummaryCard({ summary, loading }: SummaryCardProps) {
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-6 text-center">
           <div>
-            <div className="text-3xl font-bold text-primary">{summary.totalTracks.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-primary">
+              {summary.totalTracks.toLocaleString()}
+            </div>
             <div className="text-muted-foreground text-sm">Total Tracks</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-primary">{summary.totalHours.toLocaleString()}h</div>
+            <div className="text-3xl font-bold text-primary">
+              {summary.totalHours.toLocaleString()}h
+            </div>
             <div className="text-muted-foreground text-sm">Listening Time</div>
           </div>
           <div>
@@ -53,11 +56,15 @@ export function SummaryCard({ summary, loading }: SummaryCardProps) {
             <div className="text-muted-foreground text-sm">Days of Music</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-primary">{summary.uniqueArtists.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-primary">
+              {summary.uniqueArtists.toLocaleString()}
+            </div>
             <div className="text-muted-foreground text-sm">Unique Artists</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-primary">{summary.uniqueAlbums.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-primary">
+              {summary.uniqueAlbums.toLocaleString()}
+            </div>
             <div className="text-muted-foreground text-sm">Unique Albums</div>
           </div>
           <div>
@@ -67,5 +74,5 @@ export function SummaryCard({ summary, loading }: SummaryCardProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Artist {
   artist: string;
@@ -22,7 +22,7 @@ export function TopArtistsList({ artists, loading }: TopArtistsListProps) {
           <div className="text-center text-muted-foreground">Loading...</div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -38,17 +38,13 @@ export function TopArtistsList({ artists, loading }: TopArtistsListProps) {
                 <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
                   {index + 1}
                 </span>
-                <span className="font-medium truncate">
-                  {artist.artist}
-                </span>
+                <span className="font-medium truncate">{artist.artist}</span>
               </div>
-              <span className="text-primary text-sm font-medium">
-                {artist.totalHours}h
-              </span>
+              <span className="text-primary text-sm font-medium">{artist.totalHours}h</span>
             </div>
           ))}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

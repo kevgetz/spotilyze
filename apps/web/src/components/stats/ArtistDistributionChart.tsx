@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import type { ChartConfig } from "@/components/ui/chart"
-import { PieChart, Pie, Cell } from 'recharts'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import type { ChartConfig } from "@/components/ui/chart";
+import { PieChart, Pie, Cell } from "recharts";
 
 interface ArtistData {
   artist: string;
@@ -19,18 +19,18 @@ const chartConfig = {
     label: "Hours",
     color: "hsl(var(--primary))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 const COLORS = [
-  'hsl(var(--primary))',
-  'hsl(152 100% 60%)',
-  'hsl(152 100% 70%)',
-  'hsl(152 80% 50%)',
-  'hsl(152 60% 40%)',
-  'hsl(152 40% 30%)',
-  'hsl(152 20% 20%)',
-  'hsl(152 10% 15%)'
-]
+  "hsl(var(--primary))",
+  "hsl(152 100% 60%)",
+  "hsl(152 100% 70%)",
+  "hsl(152 80% 50%)",
+  "hsl(152 60% 40%)",
+  "hsl(152 40% 30%)",
+  "hsl(152 20% 20%)",
+  "hsl(152 10% 15%)",
+];
 
 export function ArtistDistributionChart({ data, loading }: ArtistDistributionChartProps) {
   if (loading) {
@@ -45,14 +45,14 @@ export function ArtistDistributionChart({ data, loading }: ArtistDistributionCha
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
-  const chartData = data.map(item => ({
+  const chartData = data.map((item) => ({
     name: item.artist,
     value: item.totalHours,
-    streams: item.streamCount
-  }))
+    streams: item.streamCount,
+  }));
 
   return (
     <Card>
@@ -80,5 +80,5 @@ export function ArtistDistributionChart({ data, loading }: ArtistDistributionCha
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

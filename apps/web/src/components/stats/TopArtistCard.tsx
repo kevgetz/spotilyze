@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Artist {
   artist: string;
@@ -22,7 +22,7 @@ export function TopArtistCard({ artists, loading }: TopArtistCardProps) {
           <div className="text-center text-muted-foreground">Loading...</div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -33,9 +33,7 @@ export function TopArtistCard({ artists, loading }: TopArtistCardProps) {
       <CardContent>
         {artists[0] && (
           <div className="text-center space-y-2">
-            <div className="text-2xl font-bold text-primary">
-              {artists[0].artist}
-            </div>
+            <div className="text-2xl font-bold text-primary">{artists[0].artist}</div>
             <div className="text-muted-foreground">
               {artists[0].totalHours}h • {artists[0].playCount} plays
             </div>
@@ -43,5 +41,5 @@ export function TopArtistCard({ artists, loading }: TopArtistCardProps) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

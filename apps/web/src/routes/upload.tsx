@@ -136,7 +136,7 @@ function UploadComponent() {
             <button
               className="btn btn-primary w-full py-3 text-base font-medium"
               disabled={uploadStatus === "uploading"}
-              onClick={handleUpload}
+              onClick={() => handleUpload(selectedFile!)}
             >
               {uploadStatus === "uploading" ? "Uploading..." : "Upload & Analyze"}
             </button>

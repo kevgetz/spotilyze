@@ -13,6 +13,10 @@ import { SummaryCard } from "@/components/stats/SummaryCard";
 import { MonthlyActivityChart } from "@/components/stats/MonthlyActivityChart";
 import { DailyPatternsChart } from "@/components/stats/DailyPatternsChart";
 import { ArtistDistributionChart } from "@/components/stats/ArtistDistributionChart";
+import { SummarySkeleton } from "@/components/stats/skeletons/SummarySkeleton";
+import { ChartSkeleton } from "@/components/stats/skeletons/ChartSkeleton";
+
+// TODO: Create Skeletons for UI
 
 export const Route = createFileRoute("/stats")({
   component: StatsComponent,
@@ -166,8 +170,29 @@ function StatsComponent() {
 
   if (loading) {
     return (
-      <div className="container mx-auto max-w-4xl py-12">
-        <div className="text-center text-muted-foreground">Loading...</div>
+      <div className="container mx-auto max-w-7xl py-12 space-y-8">
+        <h1 className="text-4xl font-bold text-center text-primary mb-12">Your Music Statistics</h1>
+        <SummarySkeleton />
+        <div className="space-y-6">
+          <ChartSkeleton title="Monthly Activity" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ChartSkeleton title="Daily Patterns" />
+            <ChartSkeleton title="Artist Distribution" />
+          </div>
+        </div>
+        
+        {/* Add skeletons for other sections too */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <ChartSkeleton title="Top Artist" />
+          <ChartSkeleton title="Top Album" />
+          <ChartSkeleton title="Top Song" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <ChartSkeleton title="Top Artists List" />
+          <ChartSkeleton title="Top Albums List" />
+          <ChartSkeleton title="Top Songs List" />
+        </div>
       </div>
     );
   }

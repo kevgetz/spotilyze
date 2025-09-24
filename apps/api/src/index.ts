@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
@@ -9,9 +10,18 @@ import jwt from "jsonwebtoken";
 
 // TODO: split index.ts in multiple files dedicated to
 
+const JWT_SECRET = process.env.JWT_SECRET;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/spotilyze';
+
+if (!JWT_SECRET) {
+  console.error('❌ JWT_SECRET environment variable is required');
+  console.error('Please create apps/api/.env file with JWT_SECRET=your-secret-key');
+  process.exit(1);
+}
+
 // MongoDB connection
 let db: Db;
-const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017/spotilyze");
+const client = new MongoClient(MONGODB_URI);
 
 async function connectToDatabase() {
   try {
@@ -36,7 +46,7 @@ const verifyToken = async (c: any, next: any) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "your-secret-key") as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
     c.set("user", decoded);
     await next();
   } catch (error) {
@@ -689,7 +699,7 @@ app.post("/auth/register", async (c) => {
     // Generate token
     const token = jwt.sign(
       { userId: result.insertedId, username },
-      process.env.JWT_SECRET || "your-secret-key",
+      JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -746,7 +756,7 @@ app.post("/auth/login", async (c) => {
     // Generate token
     const token = jwt.sign(
       { userId: user._id, username: user.username },
-      process.env.JWT_SECRET || "your-secret-key",
+      JWT_SECRET,
       { expiresIn: "7d" }
     );
 
